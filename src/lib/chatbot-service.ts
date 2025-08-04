@@ -1,4 +1,4 @@
-import { akshitKnowledgeBase, KnowledgeBase } from './knowledge-base';
+import { akshitKnowledgeBase } from './knowledge-base';
 import { InferenceClient } from '@huggingface/inference';
 
 export interface ChatMessage {
@@ -15,7 +15,7 @@ export interface ChatResponse {
 
 class ChatbotService {
   private client: InferenceClient | null = null;
-  private apiKey = process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY || '';
+  private apiKey = process.env.HF_TOKEN || '';
 
   constructor() {
     if (this.apiKey && this.apiKey !== 'your_huggingface_api_key_here') {
@@ -26,7 +26,7 @@ class ChatbotService {
   // Smart context retrieval based on question type
   private getRelevantContext(userMessage: string): string {
     const message = userMessage.toLowerCase();
-    let relevantSections: any[] = [];
+    const relevantSections: unknown[] = [];
     
     // Skills and capabilities
     if (message.includes('skill') || message.includes('strength') || message.includes('good at') || message.includes('capable') || message.includes('expert')) {
@@ -227,7 +227,7 @@ Akshit's main strengths include full-stack development expertise and rapid learn
   }
 
   // Get knowledge base data for specific queries
-  getKnowledgeData(query: string): any {
+  getKnowledgeData(query: string): unknown {
     const queryLower = query.toLowerCase();
 
     if (queryLower.includes('project') || queryLower.includes('work')) {

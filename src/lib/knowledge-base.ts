@@ -373,7 +373,7 @@ export function getKnowledgeSection(section: keyof KnowledgeBase) {
 }
 
 // Helper function to search knowledge base
-export function searchKnowledge(query: string): any {
+export function searchKnowledge(query: string): unknown {
   const queryLower = query.toLowerCase();
   
   // Search through different sections

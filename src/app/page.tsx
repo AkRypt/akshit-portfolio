@@ -1,7 +1,8 @@
 "use client"
 
-import { motion } from "framer-motion"
+
 import { siteConfig } from "@/config/site"
+import Image from "next/image"
 import { 
   Github, 
   Linkedin, 
@@ -28,7 +29,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-between p-2 md:py-4 md:px-8 min-w-screen relative bg-gradient-to-r from-gray-950 via-black to-gray-950">
             {/* Logo and Name */}
             <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-              <img src="/assets/img/a_logo.png" className="h-8" alt="Akshit Logo" />
+              <Image src="/assets/img/a_logo.png" width={32} height={32} className="h-8" alt="Akshit Logo" />
               <div className="relative">
                 <p className="absolute translate-x-0.5 -translate-y-0.5 text-lg blur-[2px] font-bold tracking-[0.2rem] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-transparent bg-clip-text">
                   Akshit
@@ -39,9 +40,9 @@ export default function Home() {
 
             {/* Menu Items */}
             <div className="flex items-center">
-              <a lang="ja" href="ja/index.html" className="mr-4 text-xl font-bold bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-transparent bg-clip-text">
+              {/* <a lang="ja" href="ja/index.html" className="mr-4 text-xl font-bold bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-transparent bg-clip-text">
                 日本語
-              </a>
+              </a> */}
               <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                 <ul className="font-medium flex flex-col justify-center items-center p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
                   <li>
@@ -170,7 +171,7 @@ export default function Home() {
 
         {/* Projects Grid */}
         <div id="projContainer" className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
-          {siteConfig.projects.map((project, index) => (
+          {siteConfig.projects.map((project) => (
             <a key={project.title} href={project.url} id={project.title} target="_blank" className="w-full h-[38vh] md:h-[64vh] bg-transparent overflow-hidden flex flex-col justify-center items-center rounded-lg relative">
               <div className="bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 w-[70%] h-[140%] absolute blur animate-spin_right_slow"></div>
               <div className="w-[98%] h-[98%] bg-gradient-to-br from-black via-gray-900 group to-black p-2 md:p-4 md:px-6 rounded-lg relative overflow-hidden hover:from-white hover:to-white">
@@ -182,7 +183,7 @@ export default function Home() {
                     {project.tools}
                   </p>
                 </div>
-                <img src={project.image} alt={project.title} className="w-full h-[50%] md:h-[70%] my-4 object-cover rounded-xl group-hover:hidden" />
+                <Image src={project.image} alt={project.title} width={400} height={300} className="w-full h-[50%] md:h-[70%] my-4 object-cover rounded-xl group-hover:hidden" />
                 <p className="text-[75%] md:text-lg mb-4 font-bold bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">
                   {project.desc}
                 </p>

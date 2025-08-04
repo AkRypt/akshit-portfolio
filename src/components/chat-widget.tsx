@@ -3,14 +3,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot } from 'lucide-react';
-import { chatbotService, ChatMessage } from '@/lib/chatbot-service';
+import { ChatMessage } from '@/lib/chatbot-service';
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      content: "Hi! I'm Akshit's AI assistant. Ask me anything about his background, skills, projects, or experience! 👋",
+      content: "Hi! I&apos;m Akshit&apos;s AI assistant. Ask me anything about his background, skills, projects, or experience! 👋",
       timestamp: new Date()
     }
   ]);
@@ -40,11 +40,23 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     try {
-      const response = await chatbotService.getResponse(input.trim());
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      const data = await response.json();
       
       const assistantMessage: ChatMessage = {
         role: 'assistant',
-        content: response.message,
+        content: data.message,
         timestamp: new Date()
       };
 
@@ -117,7 +129,7 @@ export default function ChatWidget() {
             <div className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500">
               <div className="flex items-center space-x-2">
                 <Bot className="w-5 h-5 text-white" />
-                <span className="text-white font-semibold">Akshit's AI Assistant</span>
+                <span className="text-white font-semibold">Akshit&apos;s AI Assistant</span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}

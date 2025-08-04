@@ -3,15 +3,9 @@
 
 import { siteConfig } from "@/config/site"
 import Image from "next/image"
-import { 
-  Github, 
-  Linkedin, 
-  Twitter, 
+import {
   ExternalLink,
   Code,
-  Database,
-  Bot,
-  Languages,
   School,
   Globe,
   Heart
@@ -97,9 +91,9 @@ export default function Home() {
             <h1 className="text-3xl md:text-6xl font-bold tracking-[0.2rem] animate-blink relative">Akshit Dayal</h1>
           </div>
           <div className="relative">
-            <p className="absolute translate-x-0.5 md:translate-x-1 -translate-y-0.5 md:-translate-y-1 text-3xl md:text-6xl blur-sm font-bold tracking-[0.5rem] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-transparent bg-clip-text">
-              Uttiramerur
-            </p>
+            <p
+              className="absolute translate-x-0.5 md:translate-x-1 -translate-y-0.5 md:-translate-y-1 text-3xl md:text-6xl blur-sm font-bold tracking-[0.5rem] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-transparent bg-clip-text">
+              Uttiramerur</p>
             <h1 className="text-3xl md:text-6xl font-bold tracking-[0.5rem] relative">Uttiramerur</h1>
           </div>
 
@@ -107,11 +101,14 @@ export default function Home() {
           <div className="max-w-md h-[1px] bg-borderg my-4 opacity-50"></div>
           {/* Description */}
           <h2 id="description" className="text-md md:text-xl text-gray-200">
-            A Full-Stack Developer who has worked with multiple startups 
-            and currently leveraging the power of AI to build beautiful things
+            Software Engineer enabling business intelligence through AI agents and tool-augmented LLMs. 
+            Full-Stack Developer with startup experience, currently leveraging the power of AI to build intelligent solutions.
+            <span className="block mt-2 text-sm text-gray-400">
+              💡 <span className="text-pink-400">Try asking my AI assistant</span> about my skills, projects, or experience!
+            </span>
           </h2>
           {/* Resume */}
-          <a className="relative my-10 max-w-sm" href="/assets/AkshitU_SE.pdf" target="_blank" download="AkshitU_SE.pdf">
+          <a className="relative my-10 max-w-sm" href="/assets/resume/AkshitU_2025_SE_AI.pdf" target="_blank" download="AkshitU_2025_SE_AI.pdf">
             <div className="rounded-lg absolute -inset-0.5 max-w-md bg-gradient-to-br from-grad-start to-grad-end blur animate-tilt"></div>
             <div className="rounded-xl p-3 max-w-md bg-backg relative text-center hover:bg-white z-20">
               <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent text-2xl font-bold">
@@ -135,23 +132,45 @@ export default function Home() {
           <div className="relative md:m-8">
             <div className="grid grid-cols-2 gap-6">
               <a href={siteConfig.links.github} target="_blank" className="flex flex-col p-6 px-14 shadow-sm md:h-[120px] shadow-borderg hover:border-transparent rounded-lg justify-center items-center duration-100 ease-in-out transform hover:shadow-pink-500 hover:shadow-lg hover:scale-[110%]">
-                <Github className="w-7 h-7" />
+                <svg viewBox="0 0 128 128" width="28" height="28" fill="white" stroke="white">
+                  <g fill="white">
+                    <path fillRule="evenodd" clipRule="evenodd"
+                      d="M64 5.103c-33.347 0-60.388 27.035-60.388 60.388 0 26.682 17.303 49.317 41.297 57.303 3.017.56 4.125-1.31 4.125-2.905 0-1.44-.056-6.197-.082-11.243-16.8 3.653-20.345-7.125-20.345-7.125-2.747-6.98-6.705-8.836-6.705-8.836-5.48-3.748.413-3.67.413-3.67 6.063.425 9.257 6.223 9.257 6.223 5.386 9.23 14.127 6.562 17.573 5.02.542-3.903 2.107-6.568 3.834-8.076-13.413-1.525-27.514-6.704-27.514-29.843 0-6.593 2.36-11.98 6.223-16.21-.628-1.52-2.695-7.662.584-15.98 0 0 5.07-1.623 16.61 6.19C53.7 35 58.867 34.327 64 34.304c5.13.023 10.3.694 15.127 2.033 11.526-7.813 16.59-6.19 16.59-6.19 3.287 8.317 1.22 14.46.593 15.98 3.872 4.23 6.215 9.617 6.215 16.21 0 23.194-14.127 28.3-27.574 29.796 2.167 1.874 4.097 5.55 4.097 11.183 0 8.08-.07 14.583-.07 16.572 0 1.607 1.088 3.49 4.148 2.897 23.98-7.994 41.263-30.622 41.263-57.294C124.388 32.14 97.35 5.104 64 5.104z">
+                    </path>
+                    <path
+                      d="M26.484 91.806c-.133.3-.605.39-1.035.185-.44-.196-.685-.605-.543-.906.13-.31.603-.395 1.04-.188.44.197.69.61.537.91zm2.446 2.729c-.287.267-.85.143-1.232-.28-.396-.42-.47-.983-.177-1.254.298-.266.844-.14 1.24.28.394.426.472.984.17 1.255zM31.312 98.012c-.37.258-.976.017-1.35-.52-.37-.538-.37-1.183.01-1.44.373-.258.97-.025 1.35.507.368.545.368 1.19-.01 1.452zm3.261 3.361c-.33.365-1.036.267-1.552-.23-.527-.487-.674-1.18-.343-1.544.336-.366 1.045-.264 1.564.23.527.486.686 1.18.333 1.543zm4.5 1.951c-.147.473-.825.688-1.51.486-.683-.207-1.13-.76-.99-1.238.14-.477.823-.7 1.512-.485.683.206 1.13.756.988 1.237zm4.943.361c.017.498-.563.91-1.28.92-.723.017-1.308-.387-1.315-.877 0-.503.568-.91 1.29-.924.717-.013 1.306.387 1.306.88zm4.598-.782c.086.485-.413.984-1.126 1.117-.7.13-1.35-.172-1.44-.653-.086-.498.422-.997 1.122-1.126.714-.123 1.354.17 1.444.663zm0 0">
+                    </path>
+                  </g>
+                </svg>
                 <p className="mt-1">GitHub</p>
               </a>
               <a href={siteConfig.links.linkedin} target="_blank" className="flex flex-col p-6 px-14 shadow-sm md:h-[120px] shadow-borderg hover:border-transparent rounded-lg justify-center items-center duration-100 ease-in-out transform hover:shadow-pink-500 hover:shadow-lg hover:scale-[110%]">
-                <Linkedin className="w-7 h-7" />
+                <svg viewBox="0 0 128 128" width="28" height="28" fill="white" stroke="white">
+                  <path fill="transparent"
+                    d="M116 3H12a8.91 8.91 0 00-9 8.8v104.42a8.91 8.91 0 009 8.78h104a8.93 8.93 0 009-8.81V11.77A8.93 8.93 0 00116 3z">
+                  </path>
+                  <path fill="#fff"
+                    d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 11-10.5 10.49 10.5 10.5 0 0110.5-10.49M50.53 48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z">
+                  </path>
+                </svg>
                 <p className="mt-1">LinkedIn</p>
               </a>
               <a href={siteConfig.links.twitter} target="_blank" className="flex flex-col col-span-2 h-[60px] shadow-sm shadow-borderg hover:border-transparent rounded-lg justify-center items-center duration-100 ease-in-out transform hover:shadow-pink-500 hover:shadow-lg hover:scale-[110%]">
-                <Twitter className="w-6 h-6" />
+                <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" width="24" height="24" stroke="white" viewBox="0 0 24 24" xmlSpace="preserve">
+                  <path d="M14.095479,10.316482L22.286354,1h-1.940718l-7.115352,8.087682L7.551414,1H1l8.589488,12.231093L1,23h1.940717  l7.509372-8.542861L16.448587,23H23L14.095479,10.316482z M11.436522,13.338465l-0.871624-1.218704l-6.924311-9.68815h2.981339  l5.58978,7.82155l0.867949,1.218704l7.26506,10.166271h-2.981339L11.436522,13.338465z" />
+                </svg>
                 <p className="mt-1">X.com</p>
               </a>
               <a href={siteConfig.links.kaggle} target="_blank" className="flex flex-col p-6 px-14 shadow-sm md:h-[120px] shadow-borderg hover:border-transparent rounded-lg justify-center items-center duration-100 ease-in-out transform hover:shadow-pink-500 hover:shadow-lg hover:scale-[110%]">
-                <Database className="w-7 h-7" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" stroke="white" fill="white" viewBox="0 0 32 32">
+                  <path d="M 10.351562 4 C 10.117563 4 10 4.1165625 10 4.3515625 L 10 27.644531 C 10 27.878531 10.116563 27.996094 10.351562 27.996094 L 12.648438 27.996094 C 12.882437 27.996094 13.001953 27.879531 13.001953 27.644531 L 13.001953 22.808594 L 14.810547 21.085938 L 20.048828 27.75 C 20.190828 27.915 20.354922 28 20.544922 28 L 23.716797 28 C 23.882797 28 23.977 27.952422 24 27.857422 L 23.933594 27.498047 L 17.023438 18.910156 L 23.650391 12.498047 C 23.773391 12.370047 23.730438 12 23.398438 12 L 20.117188 12 C 19.951187 12 19.785141 12.085953 19.619141 12.251953 L 13 18.974609 L 13 4.3515625 C 13 4.1165625 12.883437 4 12.648438 4 L 10.351562 4 z" />
+                </svg>
                 <p className="mt-1">Kaggle</p>
               </a>
               <a href={siteConfig.links.medium} target="_blank" className="flex flex-col p-6 px-14 shadow-sm md:h-[120px] shadow-borderg hover:border-transparent rounded-lg justify-center items-center duration-100 ease-in-out transform hover:shadow-pink-500 hover:shadow-lg hover:scale-[110%]">
-                <Globe className="w-7 h-7" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" stroke="white" fill="white" viewBox="0 0 50 50">
+                  <path d="M15 12A13 13 0 1015 38 13 13 0 1015 12zM35.5 13c-3.59 0-6.5 5.373-6.5 12 0 1.243.102 2.441.292 3.568.253 1.503.662 2.879 1.192 4.065.265.593.56 1.138.881 1.627.642.978 1.388 1.733 2.202 2.201C34.178 36.811 34.827 37 35.5 37s1.322-.189 1.933-.539c.814-.468 1.56-1.223 2.202-2.201.321-.489.616-1.034.881-1.627.53-1.185.939-2.562 1.192-4.065C41.898 27.441 42 26.243 42 25 42 18.373 39.09 13 35.5 13zM45.5 14c-.259 0-.509.173-.743.495-.157.214-.307.494-.448.833-.071.169-.14.353-.206.551-.133.395-.257.846-.37 1.343-.226.995-.409 2.181-.536 3.497-.063.658-.112 1.349-.146 2.065C43.017 23.499 43 24.241 43 25s.017 1.501.051 2.217c.033.716.082 1.407.146 2.065.127 1.316.31 2.501.536 3.497.113.498.237.948.37 1.343.066.198.135.382.206.551.142.339.292.619.448.833C44.991 35.827 45.241 36 45.5 36c1.381 0 2.5-4.925 2.5-11S46.881 14 45.5 14z" />
+                </svg>
                 <p className="mt-1">Medium</p>
               </a>
             </div>
@@ -223,7 +242,7 @@ export default function Home() {
             <div className="relative bg-backg rounded-lg p-4">
               <div className="flex items-center justify-center mx-4">
                 <div className="h-1 mr-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
-                <Code className="w-7 h-7" />
+                <Image width="28" height="28" src="https://img.icons8.com/nolan/64/code--v2.png" alt="code--v2" />
                 <p className="ml-2 text-2xl">Front End</p>
                 <div className="h-1 ml-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
               </div>
@@ -237,7 +256,7 @@ export default function Home() {
             <div className="relative bg-backg rounded-lg p-4">
               <div className="flex items-center justify-center mx-4">
                 <div className="h-1 mr-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
-                <Database className="w-7 h-7" />
+                <Image width="28" height="28" src="https://img.icons8.com/nolan/64/console.png" alt="console" />
                 <p className="ml-2 text-2xl">Back End</p>
                 <div className="h-1 ml-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
               </div>
@@ -251,7 +270,7 @@ export default function Home() {
             <div className="relative bg-backg rounded-lg p-4">
               <div className="flex items-center justify-center mx-4">
                 <div className="h-1 mr-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
-                <Database className="w-7 h-7" />
+                <Image width="28" height="28" src="https://img.icons8.com/nolan/64/database.png" alt="database" />
                 <p className="ml-2 text-2xl">DB/Cloud</p>
                 <div className="h-1 ml-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
               </div>
@@ -267,7 +286,7 @@ export default function Home() {
             <div className="relative bg-backg rounded-lg p-4">
               <div className="flex items-center justify-center mx-4">
                 <div className="h-1 mr-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
-                <Bot className="w-7 h-7" />
+                <Image width="28" height="28" src="https://img.icons8.com/nolan/64/bot.png" alt="bot" />
                 <p className="ml-2 text-2xl">AI/ML/NLP</p>
                 <div className="h-1 ml-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
               </div>
@@ -281,7 +300,7 @@ export default function Home() {
             <div className="relative bg-backg rounded-lg p-4">
               <div className="flex items-center justify-center mx-4">
                 <div className="h-1 mr-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
-                <Languages className="w-7 h-7" />
+                <Image width="28" height="28" src="https://img.icons8.com/nolan/64/python.png" alt="python" />
                 <p className="ml-2 text-2xl">Languages</p>
                 <div className="h-1 ml-4 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
               </div>
@@ -295,7 +314,7 @@ export default function Home() {
             <div className="relative bg-backg rounded-lg p-4">
               <div className="flex items-center justify-center mx-4">
                 <div className="h-1 mr-2 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
-                <Code className="w-7 h-7" />
+                <Image width="28" height="28" src="https://img.icons8.com/nolan/64/curly-brackets.png" alt="curly-brackets" />
                 <p className="ml-2 text-xl">Computer Science</p>
                 <div className="h-1 ml-2 w-[10%] bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg"></div>
               </div>
@@ -318,7 +337,7 @@ export default function Home() {
           {/* Right Side */}
           <div className="w-full mt-6 md:mt-0">
             <p className="text-gray-700 dark:text-gray-300">
-              I am a passionate technology enthusiast with a love for creating solutions that help in making this world a ✨ better place ✨. My expertise lies in creating web and mobile apps at startups, which makes me familiar with having to wear different hats and learning various tools quickly. I enjoy constantly improving my skills to stay ahead in the ever-evolving tech industry.
+              {siteConfig.about}
             </p>
             <div className="flex mt-6">
               <School className="w-6 h-6" />
@@ -340,6 +359,7 @@ export default function Home() {
         </div>
       </div>
 
+
       {/* Footer */}
       <footer className="w-full relative mt-[100px]">
         {/* Gradient Bottom Border */}
@@ -350,10 +370,26 @@ export default function Home() {
           {/* Icons */}
           <div className="flex justify-center items-center space-x-4">
             <a href={siteConfig.links.github} target="_blank">
-              <Github className="w-8 h-8" />
+              <svg viewBox="0 0 128 128" width="30" height="30" fill="white" stroke="white">
+                <g fill="white">
+                  <path fillRule="evenodd" clipRule="evenodd"
+                    d="M64 5.103c-33.347 0-60.388 27.035-60.388 60.388 0 26.682 17.303 49.317 41.297 57.303 3.017.56 4.125-1.31 4.125-2.905 0-1.44-.056-6.197-.082-11.243-16.8 3.653-20.345-7.125-20.345-7.125-2.747-6.98-6.705-8.836-6.705-8.836-5.48-3.748.413-3.67.413-3.67 6.063.425 9.257 6.223 9.257 6.223 5.386 9.23 14.127 6.562 17.573 5.02.542-3.903 2.107-6.568 3.834-8.076-13.413-1.525-27.514-6.704-27.514-29.843 0-6.593 2.36-11.98 6.223-16.21-.628-1.52-2.695-7.662.584-15.98 0 0 5.07-1.623 16.61 6.19C53.7 35 58.867 34.327 64 34.304c5.13.023 10.3.694 15.127 2.033 11.526-7.813 16.59-6.19 16.59-6.19 3.287 8.317 1.22 14.46.593 15.98 3.872 4.23 6.215 9.617 6.215 16.21 0 23.194-14.127 28.3-27.574 29.796 2.167 1.874 4.097 5.55 4.097 11.183 0 8.08-.07 14.583-.07 16.572 0 1.607 1.088 3.49 4.148 2.897 23.98-7.994 41.263-30.622 41.263-57.294C124.388 32.14 97.35 5.104 64 5.104z">
+                  </path>
+                  <path
+                    d="M26.484 91.806c-.133.3-.605.39-1.035.185-.44-.196-.685-.605-.543-.906.13-.31.603-.395 1.04-.188.44.197.69.61.537.91zm2.446 2.729c-.287.267-.85.143-1.232-.28-.396-.42-.47-.983-.177-1.254.298-.266.844-.14 1.24.28.394.426.472.984.17 1.255zM31.312 98.012c-.37.258-.976.017-1.35-.52-.37-.538-.37-1.183.01-1.44.373-.258.97-.025 1.35.507.368.545.368 1.19-.01 1.452zm3.261 3.361c-.33.365-1.036.267-1.552-.23-.527-.487-.674-1.18-.343-1.544.336-.366 1.045-.264 1.564.23.527.486.686 1.18.333 1.543zm4.5 1.951c-.147.473-.825.688-1.51.486-.683-.207-1.13-.76-.99-1.238.14-.477.823-.7 1.512-.485.683.206 1.13.756.988 1.237zm4.943.361c.017.498-.563.91-1.28.92-.723.017-1.308-.387-1.315-.877 0-.503.568-.91 1.29-.924.717-.013 1.306.387 1.306.88zm4.598-.782c.086.485-.413.984-1.126 1.117-.7.13-1.35-.172-1.44-.653-.086-.498.422-.997 1.122-1.126.714-.123 1.354.17 1.444.663zm0 0">
+                  </path>
+                </g>
+              </svg>
             </a>
             <a href={siteConfig.links.linkedin} target="_blank">
-              <Linkedin className="w-8 h-8" />
+              <svg viewBox="0 0 128 128" width="30" height="30" fill="white" stroke="white">
+                <path fill="transparent"
+                  d="M116 3H12a8.91 8.91 0 00-9 8.8v104.42a8.91 8.91 0 009 8.78h104a8.93 8.93 0 009-8.81V11.77A8.93 8.93 0 00116 3z">
+                </path>
+                <path fill="#fff"
+                  d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 11-10.5 10.49 10.5 10.5 0 0110.5-10.49M50.53 48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z">
+                </path>
+              </svg>
             </a>
           </div>
         </div>

@@ -9,7 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        spacemono: ['"Space Mono"', 'monospace'],
+        spacemono: ['SpaceMono', 'monospace'],
+        mozilla: ['"Mozilla Text"', 'sans-serif'],
+        nunito: ['"Nunito"', 'sans-serif'],
       },
       colors: {
         transparent: 'transparent',

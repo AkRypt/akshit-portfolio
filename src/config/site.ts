@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "Akshit Dayal",
-  description: "Full-Stack Developer & AI Enthusiast",
+  description: "Software Engineer enabling business intelligence through AI agents and tool-augmented LLMs. Full-Stack Developer with startup experience, currently leveraging the power of AI to build intelligent solutions.",
+  about: "I am a passionate technology enthusiast with a love for creating solutions that help in making this world a ✨ better place ✨. My expertise lies in building AI-driven applications and creating web and mobile apps at startups, which makes me familiar with having to wear different hats and learning various tools quickly. I specialize in integrating AI agents, LLMs, and vector databases to enable intelligent business solutions. I enjoy constantly improving my skills to stay ahead in the ever-evolving tech industry.",
   url: "https://akshitdayal.com",
   ogImage: "https://akshitdayal.com/og.jpg",
   links: {
@@ -35,7 +36,7 @@ export const siteConfig = {
     },
     {
       title: "Handpose",
-      desc: "Classifies your hand gestures",
+      desc: "Real-time hand sign detection using ML model in browser",
       tools: "Machine Learning, Tensorflow, Scikit-Learn, Python",
       image: "/assets/portfolio/handpose/hand.jpg",
       url: "https://github.com/AkRypt/handpose"
@@ -56,17 +57,29 @@ export const siteConfig = {
     }
   ],
   skills: {
-    frontend: ["React", "Next.js", "Angular", "React Native", "Flutter", "TailwindCSS", "HTML"],
-    backend: ["Node.js", "Express", "Django", "NestJS", "Flask"],
-    database: ["AWS", "GCP", "Azure", "SQL", "PostgreSQL", "MongoDB", "Supabase", "Firebase", "Prisma"],
-    ai: ["Machine Learning", "Deep Learning", "NLP", "Neural Networks", "HuggingFace", "LLMs", "NLTK", "PyTorch", "Tensorflow"],
-    languages: ["Python", "Java", "JavaScript", "Typescript", "Dart", "C/C++", "C#", "HTML", "CSS", "XML", "Linux"],
-    cs: ["Data Structures", "Algorithms", "Cloud Computing", "Object Oriented Programming", "Clean Architecture"]
+    frontend: [
+      "React", "Next.js", "Angular", "Flutter", "React Native", "Android", "JavaScript", "TypeScript", "HTML", "CSS", "Tailwind"
+    ],
+    backend: [
+      "Node.js", "NestJS", "Java", "Django", "Express", "Flask", "Microservices Architecture"
+    ],
+    database: [
+      "AWS (Lambda, DynamoDB, CloudWatch)", "GCP", "Azure", "PostgreSQL", "SQL", "NoSQL", "MongoDB", "Supabase", "Firebase", "Prisma"
+    ],
+    ai: [
+      "Large Language Models (LLMs)", "Prompt Engineering", "RAG", "Vector Embeddings", "Vector Databases", "Machine Learning", "Deep Learning", "NLP", "Neural Networks", "HuggingFace", "NLTK", "PyTorch", "TensorFlow", "AI Agents", "Model Context Protocol (MCP)"
+    ],
+    languages: [
+      "Python", "Java", "JavaScript", "TypeScript", "Dart", "C/C++", "C#", "HTML", "CSS", "XML", "Linux"
+    ],
+    cs: [
+      "Data Structures", "Algorithms", "Cloud Computing", "Object Oriented Programming", "Clean Architecture", "DevOps", "CI/CD", "Git", "Docker", "Unit/Integration Testing"
+    ]
   },
   education: {
     school: "New Jersey Institute of Technology",
     degree: "Master of Science in Computer Science"
   },
   languages: ["English", "Japanese", "Hindi", "Telugu"],
-  interests: ["Dance", "Toastmasters", "Video Games", "Psychology"]
+  interests: ["Dance", "Toastmasters", "Video Games", "Philosophy", "Psychology"]
 } 

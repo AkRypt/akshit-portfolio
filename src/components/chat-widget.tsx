@@ -14,7 +14,7 @@ interface Message {
 }
 
 export default function ChatWidget() {
-  const { isOpen, setIsOpen, toggleChat } = useChatContext();
+  const { isOpen, toggleChat } = useChatContext();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',

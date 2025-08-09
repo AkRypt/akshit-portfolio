@@ -1,29 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { chatbotService } from '@/lib/chatbot-service';
 
-// Safely import Upstash Redis with fallback
-let redis: any = null;
-try {
-  const { Redis } = require('@upstash/redis');
-  
-  // Try different environment variable configurations
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    // Standard Upstash variables from Vercel integration
-    redis = Redis.fromEnv();
-  } else if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-    // Vercel KV variables (should work with Upstash REST API)
-    redis = new Redis({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
-    });
-  } else if (process.env.REDIS_URL && process.env.REDIS_URL.startsWith('https://')) {
-    // Generic Redis URL (only if it's HTTPS for REST API)
-    redis = new Redis({ url: process.env.REDIS_URL });
-  } else {
-    console.warn('No compatible Redis environment variables found');
+// Type for Redis instance
+interface RedisInstance {
+  hset: (key: string, data: Record<string, unknown>) => Promise<number>;
+  zadd: (key: string, options: { score: number; member: string }) => Promise<number>;
+  zcard: (key: string) => Promise<number>;
+  zrange: (key: string, start: number, stop: number) => Promise<string[]>;
+  del: (...keys: string[]) => Promise<number>;
+  zremrangebyrank: (key: string, start: number, stop: number) => Promise<number>;
+}
+
+// Initialize Redis connection
+async function getRedisClient(): Promise<RedisInstance | null> {
+  try {
+    const { Redis } = await import('@upstash/redis');
+    
+    // Try different environment variable configurations
+    if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+      // Standard Upstash variables from Vercel integration
+      return Redis.fromEnv() as RedisInstance;
+    } else if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      // Vercel KV variables (should work with Upstash REST API)
+      return new Redis({
+        url: process.env.KV_REST_API_URL,
+        token: process.env.KV_REST_API_TOKEN,
+      }) as RedisInstance;
+    // Note: REDIS_URL alone is not supported as Upstash requires both url and token
+    } else {
+      console.warn('No compatible Redis environment variables found');
+      return null;
+    }
+  } catch {
+    console.warn('Upstash Redis not available, questions will only be logged to console and analytics');
+    return null;
   }
-} catch (error) {
-  console.warn('Upstash Redis not available, questions will only be logged to console and analytics');
 }
 
 // Function to log questions to Upstash Redis
@@ -31,7 +42,8 @@ async function logQuestion(question: string, timestamp: string) {
   // Always log to console as backup
   console.log(`[${timestamp}] Question: ${question}`);
   
-  // Only try Redis if available
+  // Try to get Redis client
+  const redis = await getRedisClient();
   if (!redis) {
     console.log('Redis not available, question logged to console only');
     return;

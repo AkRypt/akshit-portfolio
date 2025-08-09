@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 
 interface Question {
+  id?: string;
   timestamp: string;
   question: string;
 }
@@ -216,7 +217,7 @@ export default function AdminPage() {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Recent Questions</h2>
             {logs.questions.map((question, index) => (
-              <div key={index} className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+              <div key={question.id || index} className="bg-gray-900 border border-gray-700 rounded-lg p-4">
                 <div className="flex justify-between items-start mb-2">
                   <span className="text-sm text-gray-400">
                     {formatDate(question.timestamp)}

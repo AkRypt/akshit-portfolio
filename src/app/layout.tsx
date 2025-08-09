@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ChatWidget from "@/components/chat-widget";
 import { Analytics } from '@vercel/analytics/react';
+import { ChatProvider } from "@/contexts/chat-context";
 
 export const metadata: Metadata = {
   title: "Akshit Dayal | Full-Stack Developer & AI Enthusiast",
@@ -52,9 +53,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Mozilla+Text:wght@200..700&display=swap" rel="stylesheet" />
       </head>
       <body className="bg-black text-white min-h-screen">
-        {children}
-        <ChatWidget />
-        <Analytics />
+        <ChatProvider>
+          {children}
+          <ChatWidget />
+          <Analytics />
+        </ChatProvider>
       </body>
     </html>
   );

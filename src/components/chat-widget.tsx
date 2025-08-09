@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot } from 'lucide-react';
 import { track } from '@vercel/analytics';
+import { useChatContext } from '@/contexts/chat-context';
 
 interface Message {
   id: string;
@@ -13,7 +14,7 @@ interface Message {
 }
 
 export default function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen, toggleChat } = useChatContext();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -45,7 +46,7 @@ export default function ChatWidget() {
 
   const handleChatToggle = () => {
     const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
+    toggleChat();
     setShowNotification(false); // Hide notification when chat is opened
     
     // Track chat open/close events
@@ -76,11 +77,15 @@ export default function ChatWidget() {
     setInput('');
     setIsLoading(true);
 
-    // Track message sent
+    // Track message sent with enhanced metadata
     track('chat_message_sent', {
       message: input.trim(),
+      message_length: input.trim().length,
       timestamp: new Date().toISOString(),
-      message_count: messages.length + 1
+      message_count: messages.length + 1,
+      session_id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      user_agent: typeof window !== 'undefined' ? window.navigator.userAgent : '',
+      question_id: Date.now().toString()
     });
 
     try {

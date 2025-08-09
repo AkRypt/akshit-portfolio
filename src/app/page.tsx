@@ -10,8 +10,11 @@ import {
   Globe,
   Heart
 } from "lucide-react"
+import { useChatContext } from "@/contexts/chat-context"
 
 export default function Home() {
+  const { setIsOpen } = useChatContext();
+
   return (
     <div className="pt-[10%] md:pt-[8%] min-h-screen relative bg-[url('/assets/img/port_bg.png')] bg-contain bg-opacity-40">
       {/* Navigation */}
@@ -104,7 +107,12 @@ export default function Home() {
             Software Engineer enabling business intelligence through AI agents and tool-augmented LLMs. 
             Full-Stack Developer with startup experience, currently leveraging the power of AI to build intelligent solutions.
             <span className="block mt-2 text-sm text-gray-400">
-              💡 <span className="text-pink-400">Try asking my AI assistant</span> about my skills, projects, or experience!
+              💡 <button 
+                onClick={() => setIsOpen(true)}
+                className="text-pink-400 hover:text-pink-300 cursor-pointer transition-colors duration-200"
+              >
+                Try asking my AI assistant
+              </button> about my skills, projects, or experience!
             </span>
           </h2>
           {/* Resume */}

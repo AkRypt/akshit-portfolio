@@ -1,12 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { NextResponse } from 'next/server';
+
+// Safely import Upstash Redis with fallback
+let redis: any = null;
+try {
+  const { Redis } = require('@upstash/redis');
+  
+  // Try different environment variable configurations
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    // Standard Upstash variables from Vercel integration
+    redis = Redis.fromEnv();
+  } else if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    // Vercel KV variables (should work with Upstash REST API)
+    redis = new Redis({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
+  } else if (process.env.REDIS_URL && process.env.REDIS_URL.startsWith('https://')) {
+    // Generic Redis URL (only if it's HTTPS for REST API)
+    redis = new Redis({ url: process.env.REDIS_URL });
+  } else {
+    console.warn('No compatible Redis environment variables found');
+  }
+} catch (error) {
+  console.warn('Upstash Redis not available for reading logs');
+}
 
 export async function GET() {
   try {
-    const logFile = path.join(process.cwd(), 'logs', 'chatbot-questions.log');
+    // Check if Redis is available
+    if (!redis) {
+      return NextResponse.json({ 
+        questions: [],
+        total: 0,
+        message: 'Upstash Redis not configured. Questions are logged to console only. See SETUP-UPSTASH.md for setup instructions.'
+      });
+    }
     
-    if (!fs.existsSync(logFile)) {
+    // Get question IDs from timeline (most recent first)
+    const questionIds = await redis.zrange('questions:timeline', 0, 99, { rev: true }); // Get last 100 questions
+    
+    if (!questionIds || questionIds.length === 0) {
       return NextResponse.json({ 
         questions: [],
         total: 0,
@@ -14,28 +47,36 @@ export async function GET() {
       });
     }
     
-    const logContent = fs.readFileSync(logFile, 'utf-8');
-    const lines = logContent.trim().split('\n').filter(line => line.trim());
-    
-    const questions = lines.map(line => {
-      const match = line.match(/\[(.*?)\]\s*(.*)/);
-      if (match) {
-        return {
-          timestamp: match[1],
-          question: match[2]
-        };
+    // Fetch question data for each ID
+    const questions = [];
+    for (const id of questionIds) {
+      try {
+        const questionData = await redis.hgetall(`question:${id}`);
+        if (questionData && questionData.question) {
+          questions.push({
+            id: questionData.id,
+            timestamp: questionData.timestamp,
+            question: questionData.question
+          });
+        }
+      } catch (err) {
+        console.error(`Failed to fetch question ${id}:`, err);
       }
-      return null;
-    }).filter(Boolean);
+    }
     
     return NextResponse.json({
-      questions: questions.reverse(), // Most recent first
+      questions,
       total: questions.length,
       message: `Found ${questions.length} questions`
     });
     
   } catch (error) {
-    console.error('Error reading logs:', error);
-    return NextResponse.json({ error: 'Failed to read logs' }, { status: 500 });
+    console.error('Error reading questions from Redis:', error);
+    return NextResponse.json({ 
+      error: 'Failed to read questions',
+      questions: [],
+      total: 0,
+      message: 'Error fetching questions from database'
+    }, { status: 500 });
   }
 } 

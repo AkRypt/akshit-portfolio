@@ -18,7 +18,7 @@ export default function ClassicHome() {
 
   return (
     <div className="pt-[10%] md:pt-[8%] min-h-screen relative bg-[url('/assets/img/port_bg.png')] bg-contain bg-opacity-40">
-      <SiteToggle className="fixed bottom-6 left-6 z-50" />
+      <SiteToggle className="fixed bottom-[33px] left-6 z-50" />
       {/* Navigation */}
       <nav className="px-2 md:px-10 fixed top-0 w-full z-50">
         <div className="relative">

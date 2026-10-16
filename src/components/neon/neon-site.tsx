@@ -87,11 +87,11 @@ function Nav() {
     <header className="fixed inset-x-0 top-0 z-40">
       <div
         className={cn(
-          "flex items-center justify-between px-4 py-3 transition-all duration-500 sm:px-5 sm:py-4 md:px-10",
+          "flex items-center justify-between px-4 py-3 transition-all duration-500 sm:px-5 sm:py-4 md:px-10 lg:grid lg:grid-cols-[1fr_auto_1fr]",
           solid ? "bg-[#04030c]/70 backdrop-blur-md" : "bg-transparent"
         )}
       >
-        <button onClick={() => scrollTo("top")} className="group flex items-center gap-3">
+        <button onClick={() => scrollTo("top")} className="group flex items-center gap-3 justify-self-start">
           <span className="h-2 w-2 rounded-full bg-[#ff2a8a] shadow-[0_0_12px_#ff2a8a] group-hover:animate-ping" />
           <span className="font-display text-base font-extrabold uppercase tracking-[0.14em] sm:text-xl sm:tracking-[0.18em]">Akshit Dayal</span>
         </button>
@@ -102,7 +102,7 @@ function Nav() {
             </button>
           ))}
         </nav>
-        <SiteToggle />
+        <SiteToggle className="justify-self-end" />
       </div>
       <motion.div style={{ scaleX: bar }} className="h-px origin-left bg-gradient-to-r from-[#ff2a8a] via-[#8b5cff] to-[#19e6ff]" />
     </header>
@@ -126,13 +126,14 @@ function Rail() {
   }, [])
 
   return (
-    <div className="fixed right-6 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-end gap-5 xl:flex">
+    <div className="fixed right-4 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-end gap-5 xl:flex">
       {sections.map((s) => (
         <button key={s.id} onClick={() => scrollTo(s.id)} className="group flex items-center gap-3" aria-label={s.label}>
           <span
             className={cn(
               "font-mono text-[10px] uppercase tracking-[0.25em] transition-all duration-500",
-              active === s.id ? "text-white/80 opacity-100" : "translate-x-2 text-white/40 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
+              "translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
+              active === s.id ? "text-white/80" : "text-white/40"
             )}
           >
             {s.label}
@@ -161,7 +162,7 @@ function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   return (
-    <section id="top" ref={ref} className="relative flex min-h-[100svh] items-end px-5 pb-28 pt-28 md:px-10 md:pb-20 md:pt-32">
+    <section id="top" ref={ref} className="relative flex min-h-[100svh] items-end px-5 pb-28 pt-28 md:px-10 md:pt-32">
       <motion.div style={{ y, opacity }} className="w-full">
         <motion.p
           initial={{ opacity: 0 }}
@@ -172,13 +173,13 @@ function Hero() {
           <span className="mr-3 inline-block h-px w-10 translate-y-[-3px] bg-[#19e6ff]" />
           {hero.kicker}
         </motion.p>
-        <h1 className="font-display text-[15vw] font-black uppercase leading-[0.84] tracking-[-0.01em] md:text-[10.5vw]">
+        <h1 className="font-display text-[11.5vw] font-black uppercase leading-[0.84] tracking-[-0.01em] md:text-[10.5vw]">
           <MaskLine delay={0.2}>{hero.lines[0]}</MaskLine>
           <MaskLine delay={0.35} className="neon-pink flicker">
             {hero.lines[1]}
           </MaskLine>
         </h1>
-        <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -191,7 +192,7 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease, delay: 1.05 }}
-            className="flex flex-wrap gap-3"
+            className="flex shrink-0 flex-wrap gap-3"
           >
             <button onClick={() => scrollTo("work")} className="btn-neon group">
               See the work <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
@@ -202,7 +203,7 @@ function Hero() {
           </motion.div>
         </div>
       </motion.div>
-      <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
+      <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex">
         <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/40">Scroll</span>
         <span className="h-10 w-px overflow-hidden bg-white/10">
           <span className="block h-1/2 w-full animate-[drip_1.8s_ease-in-out_infinite] bg-[#ff2a8a]" />
@@ -219,10 +220,12 @@ function Stats() {
     <section className="relative px-5 py-24 md:px-10">
       <div className="grid grid-cols-1 gap-px overflow-hidden rounded-sm border border-white/10 bg-white/10 md:grid-cols-3">
         {stats.map((s, i) => (
-          <Reveal key={s.label} delay={i * 0.08} className="bg-[#05040d]/85 p-6 md:p-10">
-            <div className="neon-cyan font-display text-5xl font-black md:text-7xl">{s.value}</div>
-            <p className="mt-3 max-w-[16rem] font-mono text-xs uppercase leading-relaxed tracking-[0.15em] text-white/55">{s.label}</p>
-          </Reveal>
+          <div key={s.label} className="bg-[#05040d]/85 p-6 md:p-10">
+            <Reveal delay={i * 0.08}>
+              <div className="neon-cyan font-display text-5xl font-black md:text-7xl">{s.value}</div>
+              <p className="mt-3 max-w-[16rem] font-mono text-xs uppercase leading-relaxed tracking-[0.15em] text-white/55">{s.label}</p>
+            </Reveal>
+          </div>
         ))}
       </div>
     </section>
@@ -251,7 +254,7 @@ function SectionHead({ kanji, label, title, sub }: { kanji: string; label: strin
           {label}
         </p>
       </Reveal>
-      <h2 className="relative font-display text-[13vw] font-black uppercase leading-[0.85] md:text-[7.5vw]">{title}</h2>
+      <h2 className="relative text-balance font-display text-[13vw] font-black uppercase leading-[0.85] md:text-[7.5vw]">{title}</h2>
       {sub && (
         <Reveal delay={0.2}>
           <p className="mt-6 max-w-xl text-lg text-white/60">{sub}</p>
@@ -270,25 +273,25 @@ function CaseCard({ c, i }: { c: CaseFile; i: number }) {
           <div className="mb-8 flex flex-col-reverse gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
             <div>
               <p className="font-mono text-xs tracking-[0.3em] text-white/40">CASE {c.index}</p>
-              <h3 className="mt-3 font-display text-4xl font-black uppercase leading-none md:text-6xl">{c.title}</h3>
+              <h3 className="mt-3 text-balance font-display text-4xl font-black uppercase leading-none md:text-6xl">{c.title}</h3>
             </div>
-            <div className="sm:text-right">
+            <div className="shrink-0 sm:text-right">
               <p className={cn("font-jp text-3xl font-black sm:text-4xl md:text-5xl", accentText[c.accent])}>{c.kanji}</p>
               <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/35">{c.reading}</p>
             </div>
           </div>
           <dl className="space-y-6 text-base leading-relaxed md:text-lg">
-            <div className="grid gap-1 md:grid-cols-[8rem_1fr] md:gap-6">
-              <dt className="pt-1 font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">The ask</dt>
+            <div className="grid gap-1 md:grid-cols-[8rem_1fr] md:items-baseline md:gap-6">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">The ask</dt>
               <dd className="text-white/70">{c.ask}</dd>
             </div>
-            <div className="grid gap-1 md:grid-cols-[8rem_1fr] md:gap-6">
-              <dt className="pt-1 font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">What I did</dt>
+            <div className="grid gap-1 md:grid-cols-[8rem_1fr] md:items-baseline md:gap-6">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">What I did</dt>
               <dd className="text-white/90">{c.move}</dd>
             </div>
-            <div className="grid gap-1 border-t border-white/10 pt-6 md:grid-cols-[8rem_1fr] md:gap-6">
-              <dt className="pt-2 font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">What changed</dt>
-              <dd className={cn("font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl", accentText[c.accent])}>{c.result}</dd>
+            <div className="grid gap-1 border-t border-white/10 pt-6 md:grid-cols-[8rem_1fr] md:items-baseline md:gap-6">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">What changed</dt>
+              <dd className={cn("text-balance font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl", accentText[c.accent])}>{c.result}</dd>
             </div>
           </dl>
         </article>
@@ -342,12 +345,14 @@ function Method() {
       />
       <div className="grid gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-2">
         {method.rules.map((r, i) => (
-          <Reveal key={r.title} delay={i * 0.08} className="group relative bg-[#05040d]/85 p-8 transition-colors duration-500 hover:bg-[#0b0718]/90 md:p-12">
-            <span className="font-mono text-xs tracking-[0.3em] text-[#19e6ff]">0{i + 1}</span>
-            <h3 className="mt-4 font-display text-3xl font-black uppercase md:text-4xl">{r.title}</h3>
-            <p className="mt-4 max-w-md text-lg leading-relaxed text-white/65">{r.body}</p>
+          <div key={r.title} className="group relative bg-[#05040d]/85 p-8 transition-colors duration-500 hover:bg-[#0b0718]/90 md:p-12">
+            <Reveal delay={i * 0.08}>
+              <span className="font-mono text-xs tracking-[0.3em] text-[#19e6ff]">0{i + 1}</span>
+              <h3 className="mt-4 text-balance font-display text-3xl font-black uppercase md:text-4xl">{r.title}</h3>
+              <p className="mt-4 max-w-md text-lg leading-relaxed text-white/65">{r.body}</p>
+            </Reveal>
             <span className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-[#ff2a8a] to-[#19e6ff] transition-all duration-700 group-hover:w-full" />
-          </Reveal>
+          </div>
         ))}
       </div>
     </section>
@@ -380,10 +385,10 @@ function Path() {
         <motion.span style={{ scaleY: fill }} className="absolute left-0 top-0 h-full w-px origin-top bg-gradient-to-b from-[#ff2a8a] via-[#8b5cff] to-[#19e6ff] shadow-[0_0_12px_#ff2a8a]" />
         {timeline.map((t, i) => (
           <li key={t.where} className="relative pb-16 pl-8 md:pl-14">
-            <span className="absolute -left-[5px] top-2 h-[11px] w-[11px] rounded-full border border-[#ff2a8a] bg-[#04030c] shadow-[0_0_10px_#ff2a8a]" />
+            <span className="absolute -left-[5px] top-[2.5px] h-[11px] w-[11px] rounded-full border border-[#ff2a8a] bg-[#04030c] shadow-[0_0_10px_#ff2a8a]" />
             <Reveal delay={i * 0.05}>
               <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#19e6ff]">{t.when}</p>
-              <h3 className="mt-2 font-display text-3xl font-black uppercase md:text-5xl">{t.where}</h3>
+              <h3 className="mt-2 text-balance font-display text-3xl font-black uppercase md:text-5xl">{t.where}</h3>
               <p className="mt-1 font-mono text-xs uppercase tracking-[0.15em] text-white/45">{t.role}</p>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/70">{t.what}</p>
             </Reveal>
@@ -516,7 +521,7 @@ function Contact() {
           <span className="font-jp mr-3 text-sm">連絡</span>Contact
         </p>
       </Reveal>
-      <h2 className="font-display text-[13vw] font-black uppercase leading-[0.85] md:text-[8vw]">
+      <h2 className="text-balance font-display text-[13vw] font-black uppercase leading-[0.85] md:text-[8vw]">
         <MaskLine>Got a problem</MaskLine>
         <MaskLine delay={0.1} className="neon-pink flicker">
           that won&apos;t go away?
@@ -560,10 +565,10 @@ function Contact() {
           Check fit with a JD <MessageCircle className="h-4 w-4" />
         </button>
       </Reveal>
-      <footer className="mt-32 flex flex-col gap-4 border-t border-white/10 py-8 font-mono text-[11px] uppercase tracking-[0.25em] text-white/35 md:flex-row md:items-center md:justify-between">
+      <footer className="mt-32 flex flex-col gap-4 border-t border-white/10 py-8 font-mono text-[11px] uppercase tracking-[0.25em] text-white/35 md:grid md:pb-[34px] md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6">
         <span>© {new Date().getFullYear()} Akshit Dayal</span>
-        <span>Three.js, built by hand. Rain included.</span>
-        <SiteToggle className="self-start md:self-auto" />
+        <span className="text-balance md:text-center">Three.js, built with passion. Rain included.</span>
+        <SiteToggle className="md:mr-20 md:justify-self-end" />
       </footer>
     </section>
   )

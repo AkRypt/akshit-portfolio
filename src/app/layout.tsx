@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Big_Shoulders, JetBrains_Mono, Noto_Sans_JP, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ChatWidget from "@/components/chat-widget";
-import { Analytics } from '@vercel/analytics/react';
+import AnalyticsProvider from "@/components/analytics-provider";
 import { ChatProvider } from "@/contexts/chat-context";
 
 const display = Big_Shoulders({ subsets: ["latin"], weight: ["800", "900"], variable: "--font-display" });
@@ -62,9 +62,10 @@ export default function RootLayout({
       </head>
       <body className="bg-black text-white min-h-screen">
         <ChatProvider>
-          {children}
-          <ChatWidget />
-          <Analytics />
+          <AnalyticsProvider>
+            {children}
+            <ChatWidget />
+          </AnalyticsProvider>
         </ChatProvider>
       </body>
     </html>

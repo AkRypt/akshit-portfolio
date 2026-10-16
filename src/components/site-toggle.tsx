@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { track } from "@/lib/track-client"
 
 export default function SiteToggle({ className }: { className?: string }) {
   const classic = usePathname()?.startsWith("/classic")
@@ -24,10 +25,20 @@ export default function SiteToggle({ className }: { className?: string }) {
             : "left-1 bg-[#ff2a8a] shadow-[0_0_18px_#ff2a8a]"
         )}
       />
-      <Link href="/" className={cn("relative z-10 w-16 py-1 text-center transition-colors", classic ? "text-white/60 hover:text-white" : "text-black font-bold")}>
+      <Link
+        href="/"
+        data-track="site-toggle-3d"
+        onClick={() => track({ name: "site_toggle", label: "3d" })}
+        className={cn("relative z-10 w-16 py-1 text-center transition-colors", classic ? "text-white/60 hover:text-white" : "text-black font-bold")}
+      >
         3D
       </Link>
-      <Link href="/classic" className={cn("relative z-10 w-16 py-1 text-center transition-colors", classic ? "text-black font-bold" : "text-white/60 hover:text-white")}>
+      <Link
+        href="/classic"
+        data-track="site-toggle-classic"
+        onClick={() => track({ name: "site_toggle", label: "classic" })}
+        className={cn("relative z-10 w-16 py-1 text-center transition-colors", classic ? "text-black font-bold" : "text-white/60 hover:text-white")}
+      >
         Classic
       </Link>
     </div>

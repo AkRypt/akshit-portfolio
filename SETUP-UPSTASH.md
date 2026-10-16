@@ -1,69 +1,39 @@
-# Upstash Redis Setup Guide
+# Analytics setup (Neon Postgres)
 
-## Setup Instructions
+`/admin` and event tracking use **Neon Postgres**, not Upstash Redis / Vercel Analytics.
 
-1. **Install the package:**
-   ```bash
-   npm install @upstash/redis
-   ```
+## Required env vars
 
-2. **Create an Upstash Redis Database:**
-   
-   **Option A: Via Vercel Marketplace (Recommended)**
-   - Go to your Vercel project dashboard
-   - Navigate to "Storage" tab → "Browse All"
-   - Find "Upstash" and click "Add Integration"
-   - Create a new Redis database (free tier: 500K commands/month)
-   - Environment variables will be auto-configured
+```
+DATABASE_URL=postgresql://...          # pooled — from `neon env pull`
+DATABASE_URL_UNPOOLED=postgresql://... # optional, for migrations
+NEON_BRANCH=production
+ADMIN_PASSWORD=your-long-password
+GROQ_API_KEY=...                       # chatbot
+```
 
-   **Option B: Direct Upstash Setup**
-   - Go to [upstash.com](https://upstash.com)
-   - Sign up/Login → Create Database
-   - Choose "Global" region for best performance
-   - Copy the connection details
+Local: already pulled into `.env.local` via `neon deploy` / `neon env pull`.  
+Production: add the same vars in Vercel → Project → Settings → Environment Variables, then redeploy.
 
-3. **Environment Variables (Auto-configured):**
-   When you use Option A (Vercel Marketplace), these variables are automatically set:
-   ```
-   UPSTASH_REDIS_REST_URL=your_redis_rest_url_here
-   UPSTASH_REDIS_REST_TOKEN=your_redis_rest_token_here
-   ```
-   
-   If using Option B (Direct setup), add these to your `.env.local` file.
-   
-   **Note**: The code also supports legacy variables like `KV_REST_API_URL`, `KV_REST_API_TOKEN`, and `REDIS_URL` for backward compatibility.
+## What gets tracked
 
-4. **Deploy to Vercel:**
-   - Push your changes to Git
-   - Vercel will automatically deploy with the new Redis integration
-   - Questions will start being logged immediately
+| Event | When |
+| --- | --- |
+| `page_view` | Route changes |
+| `resume_download` | Resume PDF clicks |
+| `link_click` | External / mailto links |
+| `chat_open` | Chat widget opened |
+| `chat_message` | Each user message to the AI |
+| `site_toggle` | 3D ↔ Classic switch |
 
-## How it Works
+View at `/admin` with `ADMIN_PASSWORD`.
 
-- **Questions Storage**: Each question is stored as a hash with ID, timestamp, and content
-- **Timeline Index**: A sorted set maintains chronological order for easy retrieval
-- **Auto-cleanup**: Keeps only the last 1000 questions to prevent storage bloat
-- **Fallback**: If Redis fails, questions are logged to console as backup
+## Healthcheck
 
-## Benefits
+```bash
+node scripts/check-neon.mjs
+```
 
-- ✅ **Generous Free Tier**: 500K commands/month (vs Vercel KV's limited offering)
-- ✅ **Always On**: No sleep/pause like other free databases
-- ✅ **Multiple Databases**: No 1-database limit per account
-- ✅ **Fast**: Global edge locations for low latency
-- ✅ **Persistent**: Data survives deployments unlike filesystem logs
-- ✅ **Vercel Integration**: Easy setup through marketplace
+## Old Redis vars
 
-## Monitoring Usage
-
-- Check your Upstash dashboard for command usage
-- 500K commands = ~16K questions per month (very generous for a portfolio)
-- Console logs provide backup if you ever hit limits
-
-## Alternative Options
-
-If you prefer not to use Upstash, you can:
-
-1. **Console Logging Only**: Questions logged to Vercel function logs (current fallback)
-2. **Other Redis Providers**: Railway, Render, etc.
-3. **Different Database**: But avoid Supabase (pauses after 7 days) for portfolio sites
+`KV_*` / `REDIS_URL` / Upstash tokens are unused now. Safe to delete from `.env.local` and Vercel.

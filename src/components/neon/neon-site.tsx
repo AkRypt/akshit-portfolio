@@ -196,7 +196,7 @@ function Hero() {
             <button onClick={() => scrollTo("work")} className="btn-neon group">
               See the work <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
             </button>
-            <a href={links.resume} target="_blank" rel="noreferrer" className="btn-ghost">
+            <a href={links.resume} target="_blank" rel="noreferrer" data-track="resume-hero" className="btn-ghost">
               Resume <Download className="h-4 w-4" />
             </a>
           </motion.div>
@@ -553,7 +553,7 @@ function Contact() {
         <a href={links.x} target="_blank" rel="noreferrer" className="btn-ghost">
           X <ArrowUpRight className="h-4 w-4" />
         </a>
-        <a href={links.resume} target="_blank" rel="noreferrer" className="btn-ghost">
+        <a href={links.resume} target="_blank" rel="noreferrer" data-track="resume-contact" className="btn-ghost">
           Resume <Download className="h-4 w-4" />
         </a>
         <button onClick={() => setIsOpen(true)} className="btn-neon">

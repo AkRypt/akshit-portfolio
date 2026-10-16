@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot } from 'lucide-react';
-import { track } from '@vercel/analytics';
 import { usePathname } from 'next/navigation';
 import { useChatContext } from '@/contexts/chat-context';
+import { track } from '@/lib/track-client';
 
 const classicStyles = {
   notification: "bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 rounded-lg",
@@ -83,20 +83,8 @@ export default function ChatWidget() {
   const handleChatToggle = () => {
     const newIsOpen = !isOpen;
     toggleChat();
-    setShowNotification(false); // Hide notification when chat is opened
-    
-    // Track chat open/close events
-    if (newIsOpen) {
-      track('chat_opened', {
-        timestamp: new Date().toISOString(),
-        total_messages: messages.length
-      });
-    } else {
-      track('chat_closed', {
-        timestamp: new Date().toISOString(),
-        total_messages: messages.length
-      });
-    }
+    setShowNotification(false);
+    if (newIsOpen) track({ name: 'chat_open' });
   };
 
   const handleSendMessage = async () => {
@@ -112,17 +100,6 @@ export default function ChatWidget() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
-
-    // Track message sent with enhanced metadata
-    track('chat_message_sent', {
-      message: input.trim(),
-      message_length: input.trim().length,
-      timestamp: new Date().toISOString(),
-      message_count: messages.length + 1,
-      session_id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      user_agent: typeof window !== 'undefined' ? window.navigator.userAgent : '',
-      question_id: Date.now().toString()
-    });
 
     try {
       const response = await fetch('/api/chat', {
@@ -153,13 +130,6 @@ export default function ChatWidget() {
       };
 
       setMessages(prev => [...prev, aiMessage]);
-
-      // Track successful response
-      track('chat_response_received', {
-        response_length: data.message.length,
-        timestamp: new Date().toISOString(),
-        message_count: messages.length + 2
-      });
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: Message = {
@@ -169,13 +139,6 @@ export default function ChatWidget() {
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
-
-      // Track error
-      track('chat_error', {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
-        message_count: messages.length + 2
-      });
     } finally {
       setIsLoading(false);
     }

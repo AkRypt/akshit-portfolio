@@ -1,120 +1,142 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from "react"
 
-interface Question {
-  id?: string;
-  timestamp: string;
-  question: string;
+type AnalyticsEvent = {
+  id: string
+  name: string
+  label?: string
+  path?: string
+  href?: string
+  meta?: Record<string, unknown>
+  ts: string
 }
 
-interface LogData {
-  questions: Question[];
-  total: number;
-  message: string;
+type Summary = {
+  configured: boolean
+  totals: Record<string, number>
+  recent: AnalyticsEvent[]
+  chats: Array<{ id: string; ts: string; question: string }>
+  topLinks: Array<{ label: string; count: number }>
+  message: string
+  error?: string
+}
+
+const empty: Summary = {
+  configured: false,
+  totals: {},
+  recent: [],
+  chats: [],
+  topLinks: [],
+  message: "",
 }
 
 export default function AdminPage() {
-  const [logs, setLogs] = useState<LogData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
-  const [authError, setAuthError] = useState('');
+  const [summary, setSummary] = useState<Summary | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [password, setPassword] = useState("")
+  const [authError, setAuthError] = useState("")
 
   useEffect(() => {
-    // Check if already authenticated (stored in sessionStorage)
-    const auth = sessionStorage.getItem('admin_authenticated');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-      fetchLogs();
+    const saved = sessionStorage.getItem("admin_password")
+    if (saved) {
+      setPassword(saved)
+      setIsAuthenticated(true)
+      void fetchAnalytics(saved)
     } else {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
+
+  const fetchAnalytics = async (pwd: string) => {
+    try {
+      setLoading(true)
+      setError(null)
+      const response = await fetch("/api/analytics", {
+        headers: { "x-admin-password": pwd },
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        if (response.status === 401) {
+          setIsAuthenticated(false)
+          sessionStorage.removeItem("admin_password")
+          setAuthError("Invalid password")
+          return
+        }
+        setError(data.message || data.error || "Failed to fetch analytics")
+        setSummary(data)
+        return
+      }
+      setSummary(data)
+    } catch {
+      setError("Failed to fetch analytics")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('/api/admin/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
-      });
-
-      if (response.ok) {
-        setIsAuthenticated(true);
-        sessionStorage.setItem('admin_authenticated', 'true');
-        setAuthError('');
-        fetchLogs();
-      } else {
-        setAuthError('Invalid password');
+      })
+      if (!response.ok) {
+        setAuthError("Invalid password")
+        return
       }
+      setIsAuthenticated(true)
+      sessionStorage.setItem("admin_password", password)
+      setAuthError("")
+      await fetchAnalytics(password)
     } catch {
-      setAuthError('Authentication failed');
+      setAuthError("Authentication failed")
     }
-  };
+  }
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('admin_authenticated');
-    setPassword('');
-  };
+    setIsAuthenticated(false)
+    sessionStorage.removeItem("admin_password")
+    setPassword("")
+    setSummary(null)
+  }
 
-  const fetchLogs = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/logs');
-      const data = await response.json();
-      
-      if (response.ok) {
-        setLogs(data);
-      } else {
-        setError(data.error || 'Failed to fetch logs');
-      }
-    } catch {
-      setError('Failed to fetch logs');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const counts = summary?.totals || empty.totals
+  const cards = useMemo(
+    () => [
+      { label: "Page views", value: counts.page_view || 0 },
+      { label: "Resume downloads", value: counts.resume_download || 0 },
+      { label: "Chat opens", value: counts.chat_open || 0 },
+      { label: "Chat messages", value: counts.chat_message || 0 },
+      { label: "Link clicks", value: counts.link_click || 0 },
+      { label: "Site toggles", value: counts.site_toggle || 0 },
+    ],
+    [counts]
+  )
 
-  const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleString();
-  };
-
-  // Login form
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-black text-white p-8">
-        <div className="max-w-md mx-auto mt-20">
-          <div className="bg-gray-900 border border-gray-700 rounded-lg p-8">
-            <h1 className="text-2xl font-bold mb-6 text-center">Admin Access</h1>
-            
+      <div className="min-h-screen bg-black p-8 text-white">
+        <div className="mx-auto mt-20 max-w-md">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-8">
+            <h1 className="mb-6 text-center text-2xl font-bold">Admin Access</h1>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
-                  placeholder="Enter admin password"
-                />
-              </div>
-              
-              {authError && (
-                <div className="text-red-400 text-sm">{authError}</div>
-              )}
-              
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-pink-500 focus:outline-none"
+                placeholder="Enter admin password"
+              />
+              {authError && <div className="text-sm text-red-400">{authError}</div>}
               <button
                 onClick={handleLogin}
                 disabled={!password.trim()}
-                className="w-full px-4 py-2 bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                className="w-full rounded-lg bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 px-4 py-2 text-white disabled:opacity-50"
               >
                 Login
               </button>
@@ -122,121 +144,136 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black text-white p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">Chatbot Question Logs</h1>
-            <button 
-              onClick={handleLogout}
-              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
-            >
-              Logout
-            </button>
-          </div>
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500 mx-auto"></div>
-            <p className="mt-4">Loading logs...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-black text-white p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">Chatbot Question Logs</h1>
-            <button 
-              onClick={handleLogout}
-              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
-            >
-              Logout
-            </button>
-          </div>
-          <div className="bg-red-900 border border-red-700 rounded-lg p-4">
-            <p className="text-red-200">Error: {error}</p>
-            <button 
-              onClick={fetchLogs}
-              className="mt-4 px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600"
-            >
-              Retry
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    )
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Chatbot Question Logs</h1>
-          <div className="flex space-x-4">
-            <button 
-              onClick={fetchLogs}
-              className="px-4 py-2 bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 text-white rounded-lg hover:opacity-90"
+    <div className="min-h-screen bg-black p-6 text-white md:p-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold">Site analytics</h1>
+            <p className="mt-1 text-sm text-gray-400">{summary?.message || "Custom Neon analytics — not Vercel."}</p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => fetchAnalytics(password)}
+              className="rounded-lg bg-gradient-to-r from-pink-500 via-violet-500 to-cyan-500 px-4 py-2"
             >
               Refresh
             </button>
-            <button 
-              onClick={handleLogout}
-              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
-            >
+            <button onClick={handleLogout} className="rounded-lg bg-gray-700 px-4 py-2 hover:bg-gray-600">
               Logout
             </button>
           </div>
         </div>
 
-        <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Summary</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <p className="text-gray-400 text-sm">Total Questions</p>
-              <p className="text-2xl font-bold text-pink-500">{logs?.total || 0}</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <p className="text-gray-400 text-sm">Status</p>
-              <p className="text-green-400">Logging Active</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <p className="text-gray-400 text-sm">Last Updated</p>
-              <p className="text-blue-400">{new Date().toLocaleString()}</p>
-            </div>
-          </div>
-        </div>
+        {loading && (
+          <div className="py-16 text-center text-gray-400">Loading analytics…</div>
+        )}
 
-        {logs?.questions && logs.questions.length > 0 ? (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Recent Questions</h2>
-            {logs.questions.map((question, index) => (
-              <div key={question.id || index} className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <span className="text-sm text-gray-400">
-                    {formatDate(question.timestamp)}
-                  </span>
-                  <span className="text-xs text-gray-500">#{index + 1}</span>
-                </div>
-                <p className="text-white">{question.question}</p>
-              </div>
-            ))}
+        {error && (
+          <div className="mb-6 rounded-lg border border-red-700 bg-red-950/50 p-4 text-red-200">
+            <p className="font-semibold">Error</p>
+            <p className="mt-1 text-sm">{error}</p>
+            {!summary?.configured && (
+              <p className="mt-3 text-sm text-red-100/80">
+                Add <code className="text-pink-300">DATABASE_URL</code> from Neon (
+                <code className="text-pink-300">neon env pull</code>) to Vercel and{" "}
+                <code className="text-pink-300">.env.local</code>, then redeploy.
+              </p>
+            )}
           </div>
-        ) : (
-          <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 text-center">
-            <p className="text-gray-400">No questions logged yet.</p>
-            <p className="text-sm text-gray-500 mt-2">
-              Questions will appear here once people start using the chatbot.
+        )}
+
+        {!loading && summary && !summary.configured && (
+          <div className="mb-6 rounded-lg border border-amber-700/50 bg-amber-950/40 p-5 text-amber-100">
+            <p className="font-semibold">Neon DATABASE_URL is not configured</p>
+            <p className="mt-2 text-sm text-amber-100/80">
+              Run <code className="text-pink-300">neon env pull</code> locally and add{" "}
+              <code className="text-pink-300">DATABASE_URL</code> + <code className="text-pink-300">ADMIN_PASSWORD</code>{" "}
+              in Vercel. See <code className="text-pink-300">SETUP-UPSTASH.md</code>.
             </p>
           </div>
         )}
+
+        {!loading && summary && (
+          <>
+            <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+              {cards.map((c) => (
+                <div key={c.label} className="rounded-lg border border-gray-800 bg-gray-900 p-4">
+                  <p className="text-xs uppercase tracking-wider text-gray-400">{c.label}</p>
+                  <p className="mt-2 text-3xl font-bold text-pink-400">{c.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <section className="rounded-lg border border-gray-800 bg-gray-900 p-5">
+                <h2 className="mb-4 text-xl font-semibold">Chat questions</h2>
+                {summary.chats.length === 0 ? (
+                  <p className="text-sm text-gray-500">No chat messages logged yet.</p>
+                ) : (
+                  <div className="max-h-[28rem] space-y-3 overflow-y-auto pr-1">
+                    {summary.chats.map((c) => (
+                      <div key={c.id} className="rounded-md border border-gray-800 bg-black/40 p-3">
+                        <p className="text-xs text-gray-500">{new Date(c.ts).toLocaleString()}</p>
+                        <p className="mt-1 whitespace-pre-wrap text-sm text-white">{c.question}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              <section className="rounded-lg border border-gray-800 bg-gray-900 p-5">
+                <h2 className="mb-4 text-xl font-semibold">Top link clicks</h2>
+                {summary.topLinks.length === 0 ? (
+                  <p className="text-sm text-gray-500">No outbound link clicks yet.</p>
+                ) : (
+                  <ul className="space-y-2">
+                    {summary.topLinks.map((l) => (
+                      <li key={l.label} className="flex items-center justify-between gap-3 border-b border-gray-800 py-2 text-sm">
+                        <span className="truncate text-gray-200">{l.label}</span>
+                        <span className="font-mono text-cyan-400">{l.count}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            </div>
+
+            <section className="mt-6 rounded-lg border border-gray-800 bg-gray-900 p-5">
+              <h2 className="mb-4 text-xl font-semibold">Recent activity</h2>
+              {summary.recent.length === 0 ? (
+                <p className="text-sm text-gray-500">Nothing tracked yet. Browse the site, download the resume, use chat.</p>
+              ) : (
+                <div className="max-h-[32rem] overflow-x-auto overflow-y-auto">
+                  <table className="w-full min-w-[640px] text-left text-sm">
+                    <thead className="sticky top-0 bg-gray-900 text-xs uppercase tracking-wider text-gray-500">
+                      <tr>
+                        <th className="py-2 pr-3">When</th>
+                        <th className="py-2 pr-3">Event</th>
+                        <th className="py-2 pr-3">Label</th>
+                        <th className="py-2">Path / URL</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {summary.recent.map((e) => (
+                        <tr key={e.id} className="border-t border-gray-800 align-top">
+                          <td className="py-2 pr-3 whitespace-nowrap text-gray-500">{new Date(e.ts).toLocaleString()}</td>
+                          <td className="py-2 pr-3 font-mono text-pink-300">{e.name}</td>
+                          <td className="py-2 pr-3 text-gray-200">{e.label || String(e.meta?.question || "—")}</td>
+                          <td className="py-2 text-gray-400 break-all">{e.href || e.path || "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </section>
+          </>
+        )}
       </div>
     </div>
-  );
-} 
+  )
+}

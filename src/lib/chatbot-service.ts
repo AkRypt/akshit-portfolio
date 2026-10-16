@@ -57,6 +57,7 @@ For other questions:
 - Use concrete facts and numbers from the profile when relevant.
 
 Style rules for everything:
+- Use light Markdown when it helps: short paragraphs, **bold** for key phrases, and bullet lists with "- ".
 - No hype or filler words: avoid "passionate", "leverage", "cutting-edge", "seamless", "synergy", "rockstar", "unlock", "empower".
 - No emojis.
 

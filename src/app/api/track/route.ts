@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { trackEvent } from '@/lib/analytics'
+import { geoFromRequest } from '@/lib/geo'
 
 const ALLOWED = new Set([
   'page_view',
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
       path: typeof body.path === 'string' ? body.path : undefined,
       href: typeof body.href === 'string' ? body.href : undefined,
       meta: typeof body.meta === 'object' && body.meta ? body.meta : undefined,
+      geo: geoFromRequest(request),
     })
 
     return NextResponse.json(result)

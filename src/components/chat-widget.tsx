@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useChatContext } from '@/contexts/chat-context';
 import { track } from '@/lib/track-client';
 
@@ -253,7 +255,13 @@ export default function ChatWidget() {
                     <div
                       className={`max-w-xs md:max-w-md px-4 py-3 ${message.isUser ? s.userBubble : s.aiBubble}`}
                     >
-                      <p className="text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
+                      {message.isUser ? (
+                        <p className="text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
+                      ) : (
+                        <div className="chat-md text-sm leading-relaxed">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                        </div>
+                      )}
                     </div>
                   </motion.div>
                 ))}

@@ -12,6 +12,10 @@ const config: Config = {
         spacemono: ['SpaceMono', 'monospace'],
         mozilla: ['"Mozilla Text"', 'sans-serif'],
         nunito: ['"Nunito"', 'sans-serif'],
+        display: ['var(--font-display)', 'Impact', 'sans-serif'],
+        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+        jp: ['var(--font-jp)', '"Yu Gothic"', '"Hiragino Sans"', 'sans-serif'],
       },
       colors: {
         transparent: 'transparent',

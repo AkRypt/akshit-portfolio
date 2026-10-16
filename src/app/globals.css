@@ -76,6 +76,98 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Neon site */
+.neon-site {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.neon-pink {
+  color: #ffe1ef;
+  text-shadow: 0 0 4px #ff2a8a, 0 0 18px #ff2a8a, 0 0 42px rgba(255, 42, 138, 0.55);
+}
+.neon-cyan {
+  color: #e2fbff;
+  text-shadow: 0 0 4px #19e6ff, 0 0 18px #19e6ff, 0 0 42px rgba(25, 230, 255, 0.5);
+}
+.neon-amber {
+  color: #fff1d6;
+  text-shadow: 0 0 4px #ffb020, 0 0 18px #ffb020, 0 0 42px rgba(255, 176, 32, 0.5);
+}
+.neon-violet {
+  color: #ece4ff;
+  text-shadow: 0 0 4px #8b5cff, 0 0 18px #8b5cff, 0 0 42px rgba(139, 92, 255, 0.55);
+}
+
+.flicker {
+  animation: flicker 6s infinite steps(1);
+}
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.45; }
+}
+
+@keyframes drip {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.marquee {
+  animation: marquee-x 45s linear infinite;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+  animation-duration: 55s;
+}
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.scanlines {
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px);
+  mix-blend-mode: overlay;
+}
+
+.btn-neon,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.4rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-neon {
+  background: #ff2a8a;
+  color: #050309;
+  font-weight: 700;
+  box-shadow: 0 0 24px -4px #ff2a8a;
+}
+.btn-neon:hover {
+  background: #19e6ff;
+  box-shadow: 0 0 36px -2px #19e6ff;
+}
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(4, 3, 12, 0.6);
+}
+.btn-ghost:hover {
+  border-color: #19e6ff;
+  color: #19e6ff;
+  box-shadow: 0 0 24px -8px #19e6ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flicker,
+  .marquee {
+    animation: none;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

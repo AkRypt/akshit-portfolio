@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { chatbotService } from '@/lib/chatbot-service';
+import { getChatResponse, type ChatTurn } from '@/lib/chatbot-service';
 
 // Type for Redis instance
 interface RedisInstance {
@@ -83,7 +83,7 @@ async function logQuestion(question: string, timestamp: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json();
+    const { message, history } = await request.json();
     if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
@@ -94,7 +94,8 @@ export async function POST(request: NextRequest) {
       console.error('Logging failed:', err)
     );
     
-    const response = await chatbotService.getResponse(message);
+    const turns: ChatTurn[] = Array.isArray(history) ? history : [];
+    const response = await getChatResponse([...turns, { role: 'user', content: message }]);
     return NextResponse.json(response);
   } catch (error) {
     console.error('Chat API error:', error);

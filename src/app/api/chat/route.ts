@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getChatResponse, type ChatTurn } from '@/lib/chatbot-service'
 import { logChatQuestion } from '@/lib/analytics'
 import { geoFromRequest } from '@/lib/geo'
+import { visitorHashFromRequest } from '@/lib/visitor'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,9 +14,12 @@ export async function POST(request: NextRequest) {
     const turns: ChatTurn[] = Array.isArray(history) ? history : []
     const response = await getChatResponse([...turns, { role: 'user', content: message }])
 
-    logChatQuestion(message, { source: response.source }, geoFromRequest(request)).catch((err) =>
-      console.error('Logging failed:', err)
-    )
+    logChatQuestion(
+      message,
+      { source: response.source },
+      geoFromRequest(request),
+      visitorHashFromRequest(request)
+    ).catch((err) => console.error('Logging failed:', err))
 
     return NextResponse.json(response)
   } catch (error) {

@@ -30,8 +30,10 @@ export async function ensureAnalyticsSchema() {
           ts TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
       `
+      await sql`ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS visitor_hash TEXT`
       await sql`CREATE INDEX IF NOT EXISTS analytics_events_ts_idx ON analytics_events (ts DESC)`
       await sql`CREATE INDEX IF NOT EXISTS analytics_events_name_idx ON analytics_events (name)`
+      await sql`CREATE INDEX IF NOT EXISTS analytics_events_visitor_idx ON analytics_events (visitor_hash, ts DESC)`
     })().catch((error) => {
       schemaReady = null
       throw error

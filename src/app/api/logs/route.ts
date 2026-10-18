@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const summary = await getAnalyticsSummary(100)
+    const summary = await getAnalyticsSummary({ limit: 100, preset: 'all' })
     return NextResponse.json({
       questions: summary.chats.map((c) => ({
         id: c.id,
